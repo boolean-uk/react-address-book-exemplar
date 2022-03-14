@@ -1,39 +1,44 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom";
 
-function ContactsAdd(props) {
+import Urls from "../util/Urls"
+import FetchOptions from "../util/FetchOptions"
+import ContactForm from './ContactForm'
 
-  // setContacts and contacts must be passed as props
-  // to this component so new contacts can be added to the
-  // state
+function ContactsAdd(props) {
   const { setContacts, contacts } = props
 
-  //TODO: Implement controlled form
-  //send POST to json server on form submit
+  const defaultContact = () => {
+    return {
+      type: "work",
+      firstName: "",
+      lastName: "",
+      street: "",
+      city: "",
+      email: "",
+      linkedIn :"",
+      twitter: ""
+    }
+  }
 
-  return (
-    <form className="form-stack contact-form">
-      <h2>Create Contact</h2>
+  const [newContact, setNewContact] = useState(defaultContact())
+  const navigate = useNavigate();
+  
+  const addNewContact = () => {
+    fetch(Urls.contacts(), FetchOptions.post(newContact))
+      .then(res => res.json())
+      .then(json => {
+        setContacts([...contacts, json])
+        setNewContact(defaultContact())
+        navigate("/")
+      })
+  }
 
-      <label htmlFor="firstName">First Name</label>
-      <input id="firstName" name="firstName" type="text" required />
-
-      <label htmlFor="lastName">Last Name:</label>
-      <input id="lastName" name="lastName" type="text" required/>
-
-      <label htmlFor="street">Street:</label>
-      <input id="street" name="street" type="text" required/>
-
-      <label htmlFor="city">City:</label>
-      <input id="city" name="city" type="text" required/>
-
-      <div className="actions-section">
-        <button className="button blue" type="submit">
-          Create
-        </button>
-      </div>
-    </form>
-  )
+  return <ContactForm
+    contact={newContact}
+    setContact={setNewContact}
+    onSubmit={addNewContact}
+    actionLabel="Create" />
 }
 
 export default ContactsAdd
