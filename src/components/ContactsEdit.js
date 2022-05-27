@@ -28,7 +28,8 @@ function ContactsEdit({ setContacts, contacts }) {
       body: JSON.stringify(contactData)
     })
     const data = await res.json()
-    setContacts([...contacts, data])
+    const updatedContacts = contacts.map(contact => contact.id === Number(id) ? data.contact : contact)
+    setContacts(updatedContacts)
     navigate(`/contacts/${id}`)
   }
 
