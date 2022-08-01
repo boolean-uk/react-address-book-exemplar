@@ -1,68 +1,32 @@
-import { useState } from "react"
-import { Link, useSearchParams } from "react-router-dom"
-import Spinner from './Spinner'
+import { Link } from "react-router-dom"
 
-function ContactsList({ contacts, setContacts, isLoading }) {
-  const [searchParams, setSearchParams] = useSearchParams()
-  const handleChange = async event => {
-    const {value, checked} = event.target
-    const types = searchParams.getAll('type')
-    if (checked) types.push(value)
-    if (!checked) types.splice(types.indexOf(value), 1)
-    setSearchParams({type: types})
-    const filteredContacts = await filterByTypes(types)
-    setContacts(filteredContacts)
-  }
+import { Paths, UIText } from "../utils"
 
-  const filterByTypes = async (types) => {
-    const res = await fetch('http://localhost:4000/contacts')
-    const data = await res.json()
-    if (types.length === 0) return data
-    return data.filter(contact => types.includes(contact.type))
-  }
-
-  const handleDelete = async id => {
-    const res = await fetch(`http://localhost:4000/contacts/${id}`, { method: 'DELETE' })
-    const data = await res.json()
-    const filteredContacts = contacts.filter(contact => contact.id !== id)
-    setContacts(filteredContacts)
-  }
+export const ContactsList = (props) => {
+  
+  const { contacts } = props
 
   return (
     <>
-    <header>
-      <h2>Contacts</h2>
-    </header>
+      <header>
+        <h2>{UIText.contactListTitle}</h2>
+      </header>
+      <ul className="contacts-list">
+        {contacts.map((contact, index) => {
 
-    { isLoading ?
-      <Spinner /> :
-      <>
-        <label className="filter">
-          <input name="type" type="checkbox" value="personal"  onChange={handleChange} />
-          <span>🍻</span> Personal
-        </label>
-        <label className="filter">
-          <input name="type" type="checkbox" value="work"  onChange={handleChange} />
-          <span>💻</span> Work
-        </label>
-        <ul className="contacts-list">
-          {contacts.map(contact => {
-            return (
-              <li className="contact" key={contact.id}>
-                <p>{contact.firstName} {contact.lastName}</p>
-                <p>
-                  <Link to={`/contacts/${contact.id}`}>View</Link>
-                  <Link to={`/contacts/${contact.id}/edit`} state={{contact}}>Edit</Link>
-                  <a href="#" onClick={() => handleDelete(contact.id)}>Delete</a>
-                </p>
-              </li>
-            )
-          })}
-        </ul>
-      </>
-    }
+          const { id, firstName, lastName } = contact
+          return (
+            <li className="contact" key={index}>
+              <p>
+                {firstName} {lastName}
+              </p>
+              <Link to={`${Paths.view}/${id}`}>{UIText.contactListView}</Link>
+              <Link to={`${Paths.edit}/${id}`}>{UIText.contactListEdit}</Link>
+              <Link to={`${Paths.delete}/${id}`}>{UIText.contactListDelete}</Link>
+            </li>
+          )
+        })}
+      </ul>
     </>
   )
 }
-
-export default ContactsList

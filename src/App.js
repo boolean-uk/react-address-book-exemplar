@@ -1,43 +1,68 @@
 import { useEffect, useState } from "react"
+
 import { Link, Route, Routes } from "react-router-dom"
-import ContactsList from "./components/ContactsList"
-import ContactsAdd from "./components/ContactsAdd"
-import ContactsView from "./components/ContactsView"
-import ContactsEdit from "./components/ContactsEdit"
-import Meetings from "./components/Meetings"
 
+import { 
+  ContactsList,
+  ContactsAdd,
+  ContactsEdit,
+  ContactsDelete,
+  ContactsView
+} from "./components"
 
-import "./styles/styles.css"
+import { 
+  UIText, 
+  fetchData, 
+  apiURL, 
+  Paths
+} from "./utils"
 
-export default function App() {
+export const App = () => {
   const [contacts, setContacts] = useState([])
-  const [isLoading, setIsLoading] = useState(true)
+  
+  useEffect(() => {
 
-  useEffect(async () => {
-    const res = await fetch('http://localhost:4000/contacts')
-    const data = await res.json()
-    setContacts(data)
-    setIsLoading(false)
-  }, [])
+    const fetchParams = {
+      url: apiURL,
+      cb: setContacts
+    }
+    fetchData(fetchParams)
+
+  }, []); 
+
+  //console.log('my contacts', contacts)
 
   return (
     <>
-      <nav>
-        <h2>Menu</h2>
-        <ul>
-          <li><Link to='/'>Contacts List</Link></li>
-          <li><Link to='/contacts/add'>Add New Contact</Link></li>
-        </ul>
-      </nav>
-      <main>
-        <Routes>
-          <Route path='/' element={<ContactsList contacts={contacts} setContacts={setContacts} isLoading={isLoading}/>} />
-          <Route path='/contacts/add' element={<ContactsAdd setContacts={setContacts} contacts={contacts}/>} />
-          <Route path='/contacts/:id' element={<ContactsView />} />
-          <Route path='/contacts/:id/edit' element={<ContactsEdit setContacts={setContacts} contacts={contacts}/>} />
-          <Route path='/contacts/:id/meetings' element={<Meetings />} />
-        </Routes>
-      </main>
+    <nav>
+      <h2>{UIText.title}</h2>
+      <ul>
+        <li>
+          <Link to={Paths.home}>{UIText.linkList}</Link>
+        </li>
+        <li>
+          <Link to={Paths.add}>{UIText.linkAdd}</Link>
+        </li>
+      </ul>
+    </nav>
+    <main>
+      <Routes>
+        <Route path={Paths.home} element={<ContactsList contacts={contacts} />} />
+        <Route
+          path={Paths.add} 
+          element={<ContactsAdd contacts={contacts} setContacts={setContacts} />}
+        />
+        <Route 
+          path={Paths.editId} 
+          element={<ContactsEdit contacts={contacts} setContacts={setContacts} />} 
+        />
+        <Route 
+          path={Paths.deleteId} 
+          element={<ContactsDelete contacts={contacts} setContacts={setContacts} />} 
+        />
+        <Route path={Paths.viewId} element={<ContactsView contacts={contacts} />} />
+      </Routes>
+    </main>
     </>
   )
 }

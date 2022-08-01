@@ -1,0 +1,38 @@
+.form-stack > * + * {
+  margin-top: 0.5rem;
+}
+
+.form-stack > label {
+  display: block;
+}
+
+.form-stack > input {
+  width: 100%;
+}
+
+.contact-form {
+  max-width: 400px;
+}
+
+.contact-form h1 {
+  margin-bottom: 1rem;
+}
+
+.contact-form label {
+  font-weight: bold;
+}
+
+.contact-form .checkbox-section {
+  padding: 0.25rem 0;
+}
+
+.contact-form .actions-section {
+  display: grid;
+  grid-auto-flow: column;
+  justify-content: right;
+  gap: 0.5rem;
+}
+
+button.delete {
+  margin: 5px 5px 5px 0;
+}
