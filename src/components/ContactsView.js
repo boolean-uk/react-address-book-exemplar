@@ -1,28 +1,29 @@
-import { useEffect, useState } from "react"
-import { Link, useParams } from "react-router-dom"
+import { useParams } from "react-router-dom"
+import { UIText, getContact } from "../utils"
 
-function ContactsView() {
-  const [contact, setContact] = useState(false)
+export const ContactsView = (props) => {
+
+  const { contacts } = props
+
   const { id } = useParams()
-  useEffect(async () => {
-    const res = await fetch(`http://localhost:4000/contacts/${id}`)
-    const data = await res.json()
-    setContact(data)
-  }, [])
 
-  if (!contact) {
-    return <p>Loading</p>
-  }
+  const contact = getContact(id, contacts)
 
   return (
-    <div>
-      <h2>{contact.firstName} {contact.lastName} ({contact.type})</h2>
-      <p><a href={contact.linkedin}>LinkedIn</a> | <a href={contact.twitter}>Twitter</a></p>
-      <p>email: {contact.email}</p>
-      <p>address: {contact.street} {contact.city}</p>
-      <Link to={`/contacts/${contact.id}/meetings`}>Meetings</Link>
-    </div>
+    <>
+      <h2>{UIText.contactViewTitle}</h2>
+      {
+        contact ? (
+
+          <>            
+            <p>{contact.firstName} {contact.lastName}</p>
+            <p>{contact.street} {contact.city}</p>
+          </>
+
+        ) : (
+            <p>{UIText.contactViewNone}</p>
+        )
+      }
+    </>
   )
 }
-
-export default ContactsView
