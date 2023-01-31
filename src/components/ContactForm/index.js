@@ -1,44 +1,8 @@
-import { useState } from "react"
-import { useNavigate } from "react-router-dom";
-
-const initialState = {
-  firstName: '',
-  lastName: '',
-  street: '',
-  city: '',
-  type: '',
-  email: '',
-  linkedin: '',
-  twitter: ''
-}
-
-function ContactsAdd({ setContacts, contacts }) {
-  const [contactData, setContactData] = useState(initialState)
-  const navigate = useNavigate()
-
-  const handleChange = event => {
-    const { name, value } = event.target
-    const newContactData = {...contactData}
-    newContactData[`${name}`] = value
-    setContactData(newContactData)
-  }
-
-  const handleSubmit = async event => {
-    event.preventDefault()
-
-    const res = await fetch('http://localhost:4000/contacts', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(contactData)
-    })
-    const data = await res.json()
-    setContacts([...contacts, data])
-    navigate('/')
-  }
+function ContactForm ({type, handleSubmit, handleChange, contactData}) {
 
   return (
     <form className="form-stack contact-form" onSubmit={handleSubmit}>
-      <h2>Create Contact</h2>
+      <h2>{type} Contact</h2>
 
       <select name="type" onChange={handleChange} value={contactData.type}>
         <option id="default" >Select...</option>
@@ -69,11 +33,11 @@ function ContactsAdd({ setContacts, contacts }) {
 
       <div className="actions-section">
         <button className="button blue" type="submit">
-          Create
+          {type}
         </button>
       </div>
     </form>
   )
 }
 
-export default ContactsAdd
+export default ContactForm

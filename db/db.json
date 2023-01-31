@@ -25,19 +25,24 @@
   ],
   "meetings": [
     {
-      "name": "a test meeting",
+      "name": "a test meeting about life",
       "contactId": "1",
       "id": 2
     },
     {
-      "name": "another test meeting",
+      "name": "another test meeting for wondering about existence",
       "contactId": "2",
       "id": 3
     },
     {
-      "name": "a new meeting",
+      "name": "a new meeting for the hopeful",
       "contactId": "1",
       "id": 4
+    },
+    {
+      "name": "I am a new meeting!",
+      "contactId": "2",
+      "id": 5
     }
   ]
 }

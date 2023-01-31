@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { Link, useSearchParams } from "react-router-dom"
-import Spinner from './Spinner'
+import Spinner from '../../components/Spinner'
 
 function ContactsList({ contacts, setContacts, isLoading }) {
   const [searchParams, setSearchParams] = useSearchParams()

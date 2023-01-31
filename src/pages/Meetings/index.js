@@ -20,7 +20,7 @@ function Meetings() {
   const handleChange = event => {
     const { name, value } = event.target
     const newMeetingData = {...meetingData}
-    newMeetingData[`${name}`] = value
+    newMeetingData[name] = value
     setMeetingData(newMeetingData)
   }
 
